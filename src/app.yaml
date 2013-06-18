@@ -1,0 +1,19 @@
+application: ingobert-app-hrd
+version: rev-028
+runtime: python
+api_version: 1
+
+builtins:
+- remote_api: on
+- datastore_admin: on
+
+handlers:
+- url: /
+  static_files: index.html
+  upload: index.html
+  
+- url: /stylesheets
+  static_dir: stylesheets
+  
+- url: /.*
+  script: ingobert.py
