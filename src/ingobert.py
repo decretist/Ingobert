@@ -3,6 +3,7 @@ from google.appengine.ext import db
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app
+import webapp2
 import difflib
 import os
 import re
@@ -49,7 +50,7 @@ class Decretum(db.Model):
     source = db.StringProperty()
     text = db.TextProperty()
 
-class MainPage(webapp.RequestHandler):
+class MainPage(webapp2.RequestHandler):
     def get(self):
         chapters = db.GqlQuery('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
         for chapter in chapters:
@@ -67,7 +68,7 @@ class MainPage(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), '2column.html')
         self.response.out.write(template.render(path, template_values))
 
-class TwoColumn(webapp.RequestHandler):
+class TwoColumn(webapp2.RequestHandler):
     def get(self):
         chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         for chapter in chapters:
@@ -85,7 +86,7 @@ class TwoColumn(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), '2column.html')
         self.response.out.write(template.render(path, template_values))
 
-class FourColumn(webapp.RequestHandler):
+class FourColumn(webapp2.RequestHandler):
     def get(self):
         chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
@@ -116,12 +117,14 @@ class FourColumn(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), '4column.html')
         self.response.out.write(template.render(path, template_values))
 
-application = webapp.WSGIApplication([('/decretum/', MainPage),
+application = webapp2.WSGIApplication([('/decretum/', MainPage),
                                       ('/capitulary/2column', TwoColumn),
                                       ('/capitulary/4column', FourColumn),], debug=True)
 
+""" Old code:
 def main():
     run_wsgi_app(application)
 
 if __name__ == "__main__":
     main()
+"""

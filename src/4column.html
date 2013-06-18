@@ -15,7 +15,7 @@ Ingobert: 4-Column Comparison
 <div style="background-color: #f0f0f0">
 {% endif %}
 <h4 style="text-align:center">{{column.source}}</h4>
-{{column.text}}
+{{column.text|safe}}
 {% if column.highlight %}
 </div>
 {% endif %}

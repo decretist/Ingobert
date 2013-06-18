@@ -1,11 +1,11 @@
 application: ingobert-app-hrd
 version: rev-028
-runtime: python
+runtime: python27
 api_version: 1
+threadsafe: true
 
 builtins:
 - remote_api: on
-- datastore_admin: on
 
 handlers:
 - url: /
@@ -16,4 +16,4 @@ handlers:
   static_dir: stylesheets
   
 - url: /.*
-  script: ingobert.py
+  script: ingobert.application
