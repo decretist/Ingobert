@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.template.loaders.filesystem import Loader
 from django.template.loader import render_to_string
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 import difflib
 import os
 import re
@@ -33,26 +33,26 @@ def compare(left, right):
             column.append(string.replace(diff, '  ', ''))
     return ' '.join(column)
 
-class Capitulary(db.Model):
-    number = db.IntegerProperty()
-    chapter = db.IntegerProperty()
-    source = db.StringProperty()
-    text = db.TextProperty()
+class Capitulary(ndb.Model):
+    number = ndb.IntegerProperty()
+    chapter = ndb.IntegerProperty()
+    source = ndb.StringProperty()
+    text = ndb.TextProperty()
 
-class Decretum(db.Model):
-    distinction = db.BooleanProperty()
-    case = db.BooleanProperty()
-    number = db.IntegerProperty()
-    dac = db.BooleanProperty()
-    dpc = db.BooleanProperty()
-    chapter = db.IntegerProperty()
-    source = db.StringProperty()
-    text = db.TextProperty()
+class Decretum(ndb.Model):
+    distinction = ndb.BooleanProperty()
+    case = ndb.BooleanProperty()
+    number = ndb.IntegerProperty()
+    dac = ndb.BooleanProperty()
+    dpc = ndb.BooleanProperty()
+    chapter = ndb.IntegerProperty()
+    source = ndb.StringProperty()
+    text = ndb.TextProperty()
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
         os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
-        chapters = db.GqlQuery('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
+        chapters = ndb.gql('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
         for chapter in chapters:
             if (chapter.source == 'Aa'):
                 Aa = chapter
@@ -70,7 +70,7 @@ class MainPage(webapp2.RequestHandler):
 class TwoColumn(webapp2.RequestHandler):
     def get(self):
         os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
-        chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
+        chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         for chapter in chapters:
             if (chapter.source == self.request.get('column_1')):
                 column_1 = chapter
@@ -88,7 +88,7 @@ class TwoColumn(webapp2.RequestHandler):
 class FourColumn(webapp2.RequestHandler):
     def get(self):
         os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
-        chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
+        chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
         list = ['5', '5bis', 'Sirmond', 'Boretius']
         list.remove(self.request.get('comparison'))

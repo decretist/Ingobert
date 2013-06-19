@@ -1,5 +1,5 @@
 application: ingobert-app-hrd
-version: rev-028
+version: rev-031
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -20,4 +20,6 @@ handlers:
 
 libraries:
 - name: django
-  version: latest
+  version: "1.4"
+- name: webapp2
+  version: "2.5.2"
