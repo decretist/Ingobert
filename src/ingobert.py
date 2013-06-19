@@ -16,8 +16,8 @@ dict = {'Aa': 'Admont, Stiftsbibliothek 23 and 43',
         'Boretius': '1883 Boretius Edition'}
 
 def compare(left, right):
-    a = re.split("[\s\.]+", left.lower())
-    b = re.split("[\s\.]+", right.lower())
+    a = re.split('[\s\.]+', left.lower())
+    b = re.split('[\s\.]+', right.lower())
     column = []
     diffs = difflib.ndiff(a, b)
     for diff in diffs:
@@ -51,7 +51,7 @@ class Decretum(ndb.Model):
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
         for chapter in chapters:
             if (chapter.source == 'Aa'):
@@ -69,25 +69,37 @@ class MainPage(webapp2.RequestHandler):
 
 class TwoColumn(webapp2.RequestHandler):
     def get(self):
-        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
+        column_1 = column_2 = None
+        column_1_body = column_2_body = ''
         for chapter in chapters:
             if (chapter.source == self.request.get('column_1')):
                 column_1 = chapter
             if (chapter.source == self.request.get('column_2')):
                 column_2 = chapter
+        if column_1 is not None:
+            if column_2 is not None:
+                column_1_body = compare(column_1.text, column_2.text)
+            else:
+                column_1_body = compare(column_1.text, '')
+        if column_2 is not None:
+            if column_1 is not None:
+                column_2_body = compare(column_2.text, column_1.text)
+            else:
+                column_2_body = compare(column_2.text, '')
         template_values = {
             'page_head': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
             'column_1_head': dict[self.request.get('column_1')],
             'column_2_head': dict[self.request.get('column_2')],
-            'column_1_body': compare(column_1.text, column_2.text),
-            'column_2_body': compare(column_2.text, column_1.text),
+            'column_1_body': column_1_body,
+            'column_2_body': column_2_body,
         }
         self.response.out.write(render_to_string('2column.html', template_values))
 
 class FourColumn(webapp2.RequestHandler):
     def get(self):
-        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
         list = ['5', '5bis', 'Sirmond', 'Boretius']
