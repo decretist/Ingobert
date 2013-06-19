@@ -16,4 +16,8 @@ handlers:
   static_dir: stylesheets
   
 - url: /.*
-  script: ingobert.application
+  script: ingobert.app
+
+libraries:
+- name: django
+  version: latest

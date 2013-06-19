@@ -1,13 +1,12 @@
 # -*- coding: UTF-8 -*-
+from django.template.loaders.filesystem import Loader
+from django.template.loader import render_to_string
 from google.appengine.ext import db
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-from google.appengine.ext.webapp.util import run_wsgi_app
-import webapp2
 import difflib
 import os
 import re
 import string
+import webapp2
 
 dict = {'Aa': 'Admont, Stiftsbibliothek 23 and 43',
         'Bc': 'Barcelona, Arxiu de la Corona d\'Aragó, Santa Maria de Ripoll 78',
@@ -52,6 +51,7 @@ class Decretum(db.Model):
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
+        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
         chapters = db.GqlQuery('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
         for chapter in chapters:
             if (chapter.source == 'Aa'):
@@ -65,11 +65,11 @@ class MainPage(webapp2.RequestHandler):
             'column_1_body': compare(Aa.text, Bc.text),
             'column_2_body': compare(Bc.text, Aa.text),
         }
-        path = os.path.join(os.path.dirname(__file__), '2column.html')
-        self.response.out.write(template.render(path, template_values))
+        self.response.out.write(render_to_string('2column.html', template_values))
 
 class TwoColumn(webapp2.RequestHandler):
     def get(self):
+        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
         chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         for chapter in chapters:
             if (chapter.source == self.request.get('column_1')):
@@ -83,11 +83,11 @@ class TwoColumn(webapp2.RequestHandler):
             'column_1_body': compare(column_1.text, column_2.text),
             'column_2_body': compare(column_2.text, column_1.text),
         }
-        path = os.path.join(os.path.dirname(__file__), '2column.html')
-        self.response.out.write(template.render(path, template_values))
+        self.response.out.write(render_to_string('2column.html', template_values))
 
 class FourColumn(webapp2.RequestHandler):
     def get(self):
+        os.environ["DJANGO_SETTINGS_MODULE"] = "settings"
         chapters = db.GqlQuery('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
         list = ['5', '5bis', 'Sirmond', 'Boretius']
@@ -114,17 +114,9 @@ class FourColumn(webapp2.RequestHandler):
             'title': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
             'columns': columns,
         }
-        path = os.path.join(os.path.dirname(__file__), '4column.html')
-        self.response.out.write(template.render(path, template_values))
+        self.response.out.write(render_to_string('4column.html', template_values))
 
-application = webapp2.WSGIApplication([('/decretum/', MainPage),
-                                      ('/capitulary/2column', TwoColumn),
-                                      ('/capitulary/4column', FourColumn),], debug=True)
+app = webapp2.WSGIApplication([('/decretum/', MainPage),
+                               ('/capitulary/2column', TwoColumn),
+                               ('/capitulary/4column', FourColumn),], debug=True)
 
-""" Old code:
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()
-"""
