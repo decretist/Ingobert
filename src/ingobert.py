@@ -120,7 +120,10 @@ class FourColumn(webapp2.RequestHandler):
                 if (tmp == tmps[0]):
                     column['highlight'] = True
                 column['source'] = dict[tmp.source]
-                column['text'] = compare(tmp.text, tmps[0].text)
+                if (tmps[0] != None):
+                    column['text'] = compare(tmp.text, tmps[0].text)
+                elif (tmps[0] == None):
+                    column['text'] = compare(tmp.text, '')
             columns.append(column)
         template_values = {
             'title': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
