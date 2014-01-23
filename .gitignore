@@ -1,5 +1,4 @@
 .project
 .pydevproject
 .settings/
-etc/
 src/*.pyc
