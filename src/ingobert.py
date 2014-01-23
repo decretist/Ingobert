@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-from django.template.loaders.filesystem import Loader
 from django.template.loader import render_to_string
 from google.appengine.ext import ndb
 import difflib
@@ -67,6 +66,17 @@ class MainPage(webapp2.RequestHandler):
         }
         self.response.out.write(render_to_string('2column.html', template_values))
 
+class DecretumTable(webapp2.RequestHandler):
+    def get(self):
+        chapters = ndb.gql('SELECT * FROM Decretum WHERE distinction = :1 AND number = :2', True, 63)
+        for chapter in chapters:
+            if (chapter.source == 'Aa'):
+                Aa = chapter
+            elif (chapter.source == 'Bc'):
+                Bc = chapter
+        self.response.headers['Content-Type'] = 'text/html'        
+        self.response.write(difflib.HtmlDiff().make_file(Aa.text.split(), Bc.text.split()))
+
 class TwoColumn(webapp2.RequestHandler):
     def get(self):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -132,6 +142,7 @@ class FourColumn(webapp2.RequestHandler):
         self.response.out.write(render_to_string('4column.html', template_values))
 
 app = webapp2.WSGIApplication([('/decretum/', MainPage),
+                               ('/decretum/table', DecretumTable),
                                ('/capitulary/2column', TwoColumn),
                                ('/capitulary/4column', FourColumn),], debug=True)
 
