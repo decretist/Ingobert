@@ -2,10 +2,10 @@
 from django.template.loaders.filesystem import Loader
 from django.template.loader import render_to_string
 from google.appengine.ext import ndb
+import diff_match_patch
 import difflib
 import os
 import re
-import string
 import webapp2
 
 sourceDict = {'Aa': 'Admont, Stiftsbibliothek 23 and 43',
@@ -19,20 +19,20 @@ def compare(left, right):
     a = re.split('[\s\.]+', left.lower())
     b = re.split('[\s\.]+', right.lower())
     column = []
-    diffs = difflib.ndiff(a, b)
+    dmp = diff_match_patch.diff_match_patch()
+    (wordText1, wordText2, wordArray) = dmp.diff_linesToChars('\n'.join(a), '\n'.join(b))
+    diffs = dmp.diff_main(wordText1, wordText2, False);
+    dmp.diff_charsToLines(diffs, wordArray)
     for diff in diffs:
-        if re.match('  $', diff):
+        text = ' '.join(re.split('\n', diff[1]))
+        if diff[0] == 1:
             continue
-        elif re.match('\? ', diff):
-            continue
-        elif re.match('- ', diff):
-            column.append('<span class=highlight>' + string.replace(diff, '- ', '') + '</span>')
-        elif re.match('\+ ', diff):
-            pass
-        else:
-            column.append(string.replace(diff, '  ', ''))
-    return ' '.join(column)
-
+        elif diff[0] == 0:
+            column.append(text)
+        elif diff[0] == -1:
+            column.append('<span class=highlight>' + text.rstrip() + '</span>')
+    return(' '.join(column))
+    
 class Capitulary(ndb.Model):
     number = ndb.IntegerProperty()
     chapter = ndb.IntegerProperty()
