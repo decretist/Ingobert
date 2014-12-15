@@ -3,13 +3,13 @@ from django.template.loaders.filesystem import Loader
 from django.template.loader import render_to_string
 from google.appengine.ext import ndb
 import diff_match_patch
-import difflib
 import os
 import re
 import webapp2
 
 sourceDict = {'Aa': 'Admont, Stiftsbibliothek 23 and 43',
         'Bc': 'Barcelona, Arxiu de la Corona d\'Aragó, Santa Maria de Ripoll 78',
+        '4': 'Vat. lat. 4982',
         '5': 'Beinecke 413, 98r-102r',
         '5bis': 'Beinecke 413, 102v-104v',
         'Sirmond': '1623 Sirmond Edition',
@@ -102,7 +102,7 @@ class FourColumn(webapp2.RequestHandler):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
-        sourceList = ['5', '5bis', 'Sirmond', 'Boretius']
+        sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius']
         sourceList.remove(self.request.get('comparison'))
         for chapter in chapters:
             if (chapter.source == self.request.get('comparison')):
