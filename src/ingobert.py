@@ -97,40 +97,6 @@ class TwoColumn(webapp2.RequestHandler):
         }
         self.response.out.write(render_to_string('2column.html', template_values))
 
-class FourColumn(webapp2.RequestHandler):
-    def get(self):
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-        chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
-        tmps = [None, None, None, None]
-        sourceList = ['5', '5bis', 'Sirmond', 'Boretius']
-        sourceList.remove(self.request.get('comparison'))
-        for chapter in chapters:
-            if (chapter.source == self.request.get('comparison')):
-                tmps[0] = chapter
-            if (chapter.source == sourceList[0]):
-                tmps[1] = chapter
-            if (chapter.source == sourceList[1]):
-                tmps[2] = chapter
-            if (chapter.source == sourceList[2]):
-                tmps[3] = chapter
-        columns = []
-        for tmp in tmps:
-            column = {}
-            if (tmp != None):
-                if (tmp == tmps[0]):
-                    column['highlight'] = True
-                column['source'] = sourceDict[tmp.source]
-                if (tmps[0] != None):
-                    column['text'] = compare(tmp.text, tmps[0].text)
-                elif (tmps[0] == None):
-                    column['text'] = compare(tmp.text, '')
-            columns.append(column)
-        template_values = {
-            'title': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
-            'columns': columns,
-        }
-        self.response.out.write(render_to_string('4column.html', template_values))
-
 class FiveColumn(webapp2.RequestHandler):
     def get(self):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -169,6 +135,5 @@ class FiveColumn(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([('/decretum/', MainPage),
                                ('/capitulary/2column', TwoColumn),
-                               ('/capitulary/5column', FiveColumn),
-                               ('/capitulary/4column', FourColumn),], debug=True)
+                               ('/capitulary/5column', FiveColumn),], debug=True)
 

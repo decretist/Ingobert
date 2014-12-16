@@ -29,7 +29,7 @@ Ingobert: Front Page
 <br>
 <h4>Select left column source:</h4>
 <select name="column_1">
-<option value="4">Vat. lat. 4982</option>
+<option selected value="4">Vat. lat. 4982</option>
 <option value="5">Beinecke 413, 98r-102r</option>
 <option value="5bis">Beinecke 413, 102v-104v</option>
 <option value="Sirmond">1623 Sirmond Edition</option>
@@ -40,9 +40,9 @@ Ingobert: Front Page
 <select name="column_2">
 <option value="4">Vat. lat. 4982</option>
 <option value="5">Beinecke 413, 98r-102r</option>
-<option value="5bis">Beinecke 413, 102v-104v</option>
+<option selected value="5bis">Beinecke 413, 102v-104v</option>
 <option value="Sirmond">1623 Sirmond Edition</option>
-<option selected value="Boretius">1883 Boretius Edition</option>
+<option value="Boretius">1883 Boretius Edition</option>
 </select>
 <br>
 <h4>Submit:</h4>
@@ -51,38 +51,6 @@ Ingobert: Front Page
 </div>
 <div class="column grid_4">
 <div style="background-color: #f0f0f0">
-<h3 style="text-align:center">4-Column Comparison</h3>
-<form action="/capitulary/4column" method="get">
-<h4>Select capitulum:</h4>
-<select name="chapter">
-<option value="1">Capitulare Carisiacense, c. 1</option>
-<option value="2">Capitulare Carisiacense, c. 2</option>
-<option value="3">Capitulare Carisiacense, c. 3</option>
-<option value="4">Capitulare Carisiacense, c. 4</option>
-<option value="5">Capitulare Carisiacense, c. 5</option>
-<option value="6">Capitulare Carisiacense, c. 6</option>
-<option value="7">Capitulare Carisiacense, c. 7</option>
-<option value="8">Capitulare Carisiacense, c. 8</option>
-<option value="9">Capitulare Carisiacense, c. 9</option>
-<option value="10">Capitulare Carisiacense, c. 10</option>
-<option value="11">Capitulare Carisiacense, c. 11</option>
-<option value="12">Capitulare Carisiacense, c. 12</option>
-</select>
-<br>
-<h4>Select comparison source:</h4>
-<select name="comparison">
-<option value="5">Beinecke 413, 98r-102r</option>
-<option value="5bis">Beinecke 413, 102v-104v</option>
-<option value="Sirmond">1623 Sirmond Edition</option>
-<option selected value="Boretius">1883 Boretius Edition</option>
-</select>
-<br>
-<h4>Submit:</h4>
-<input type="Submit" value="Submit">
-</form>
-</div>
-</div>
-<div class="column grid_4">
 <h3 style="text-align:center">5-Column Comparison</h3>
 <form action="/capitulary/5column" method="get">
 <h4>Select capitulum:</h4>
@@ -103,19 +71,18 @@ Ingobert: Front Page
 <br>
 <h4>Select comparison source:</h4>
 <select name="comparison">
-<option value="4">Vat. lat. 4982</option>
+<option selected value="4">Vat. lat. 4982</option>
 <option value="5">Beinecke 413, 98r-102r</option>
 <option value="5bis">Beinecke 413, 102v-104v</option>
 <option value="Sirmond">1623 Sirmond Edition</option>
-<option selected value="Boretius">1883 Boretius Edition</option>
+<option value="Boretius">1883 Boretius Edition</option>
 </select>
 <br>
 <h4>Submit:</h4>
 <input type="Submit" value="Submit">
 </form>
 </div>
-
-<!--
+</div>
 <div class="column grid_4">
 <h3 style="text-align:center"><cite>Decretum</cite> Demo</h3>
 <p>
@@ -123,8 +90,6 @@ Here is a link to the original demo page comparing the Aa and Bc texts of
 <a href="http://ingobert-app.appspot.com/decretum/">Gratian, <cite>Decretum</cite>, D. 63, d.p.c. 34</a>.
 </p>
 </div>
-  -->
-
 </div>
 </body>
 </html>
