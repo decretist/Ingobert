@@ -1,0 +1,26 @@
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="/stylesheets/ingobert.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheets/grid.css" />
+<title>
+Ingobert: 6-Column Comparison
+</title>
+</head>
+<body>
+<h3 style="text-align:center">{{title}}</h3>
+<div class="row">
+{% for column in columns %}
+<div class="column grid_2">
+{% if column.highlight %}
+<div style="background-color: #f0f0f0">
+{% endif %}
+<h4 style="text-align:center">{{column.source}}</h4>
+{{column.text|safe}}
+{% if column.highlight %}
+</div>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+</body>
+</html>
