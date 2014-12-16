@@ -1,0 +1,27 @@
+.grid_1 { width: 76px; }
+.grid_2 { width: 172px; }
+.grid_3 { width: 268px; }
+.grid_4 { width: 364px; }
+.grid_5 { width: 460px; }
+.grid_6 { width: 556px; }
+.grid_7 { width: 652px; }
+.grid_8 { width: 748px; }
+.grid_9 { width: 844px; }
+.grid_10 { width: 940px; }
+
+.column {
+        margin: 0 10px 0 10px;
+        overflow: hidden;
+        float: left;
+        display: inline;
+}
+.row {
+        width: 960px;
+        margin: 0 auto;
+        overflow: hidden;
+}
+.row .row {
+        margin: 0 -10px 0 -10px;
+        width: auto;
+        display: inline-block;
+}

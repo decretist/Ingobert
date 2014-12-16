@@ -102,7 +102,7 @@ class FourColumn(webapp2.RequestHandler):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None]
-        sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius']
+        sourceList = ['5', '5bis', 'Sirmond', 'Boretius']
         sourceList.remove(self.request.get('comparison'))
         for chapter in chapters:
             if (chapter.source == self.request.get('comparison')):
@@ -131,12 +131,12 @@ class FourColumn(webapp2.RequestHandler):
         }
         self.response.out.write(render_to_string('4column.html', template_values))
 
-class SixColumn(webapp2.RequestHandler):
+class FiveColumn(webapp2.RequestHandler):
     def get(self):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
-        tmps = [None, None, None, None, None, None]
-        sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius', '']
+        tmps = [None, None, None, None, None]
+        sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius']
         sourceList.remove(self.request.get('comparison'))
         for chapter in chapters:
             if (chapter.source == self.request.get('comparison')):
@@ -149,8 +149,6 @@ class SixColumn(webapp2.RequestHandler):
                 tmps[3] = chapter
             if (chapter.source == sourceList[3]):
                 tmps[4] = chapter
-            if (chapter.source == sourceList[4]):
-                tmps[5] = chapter
         columns = []
         for tmp in tmps:
             column = {}
@@ -167,10 +165,10 @@ class SixColumn(webapp2.RequestHandler):
             'title': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
             'columns': columns,
         }
-        self.response.out.write(render_to_string('6column.html', template_values))
+        self.response.out.write(render_to_string('5column.html', template_values))
 
 app = webapp2.WSGIApplication([('/decretum/', MainPage),
                                ('/capitulary/2column', TwoColumn),
-                               ('/capitulary/6column', SixColumn),
+                               ('/capitulary/5column', FiveColumn),
                                ('/capitulary/4column', FourColumn),], debug=True)
 
