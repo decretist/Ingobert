@@ -101,20 +101,17 @@ class TwoColumn(webapp2.RequestHandler):
 class FiveColumn(webapp2.RequestHandler):
     def get(self):
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-        chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
-        tmps = [None, None, None, None, None]
+        results = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
+        chapters = [None, None, None, None, None]
         sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius']
         comparison = self.request.get('comparison')
-        sourceList.remove(comparison) # returns None
-        sourceList = [comparison] + sourceList # reorder the source list
-        for chapter in chapters:
-        # for chapter in sorted(chapters, key=lambda chapter: sourceList.index(chapter.source)):
-            if (chapter.source in sourceList):
-                tmps[sourceList.index(chapter.source)] = chapter
+        sourceList.remove(comparison)
+        sourceList = [comparison] + sourceList
+        for result in results:
+            if (result.source in sourceList):
+                chapters[sourceList.index(result.source)] = result
             else:
                 continue
-        chapters = tmps
-        logging.info(chapters)
         columns = []
         for chapter in chapters:
             column = {}
