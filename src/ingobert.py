@@ -108,6 +108,7 @@ class FiveColumn(webapp2.RequestHandler):
         sourceList.remove(comparison) # returns None
         sourceList = [comparison] + sourceList # reorder the source list
         for chapter in chapters:
+        # for chapter in sorted(chapters, key=lambda chapter: sourceList.index(chapter.source)):
             if (chapter.source in sourceList):
                 tmps[sourceList.index(chapter.source)] = chapter
             else:
