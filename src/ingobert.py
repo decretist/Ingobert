@@ -112,17 +112,19 @@ class FiveColumn(webapp2.RequestHandler):
                 tmps[sourceList.index(chapter.source)] = chapter
             else:
                 continue
+        chapters = tmps
+        logging.info(chapters)
         columns = []
-        for tmp in tmps:
+        for chapter in chapters:
             column = {}
-            if (tmp != None):
-                if (tmp == tmps[0]):
+            if (chapter != None):
+                if (chapter == chapters[0]):
                     column['highlight'] = True
-                column['source'] = sourceDict[tmp.source]
-                if (tmps[0] != None):
-                    column['text'] = compare(tmp.text, tmps[0].text)
-                elif (tmps[0] == None):
-                    column['text'] = compare(tmp.text, '')
+                column['source'] = sourceDict[chapter.source]
+                if (chapters[0] != None):
+                    column['text'] = compare(chapter.text, chapters[0].text)
+                elif (chapters[0] == None):
+                    column['text'] = compare(chapter.text, '')
             columns.append(column)
         template_values = {
             'title': 'Capitulare Carisiacense, cap. ' + self.request.get('chapter'),
