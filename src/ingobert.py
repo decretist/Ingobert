@@ -3,6 +3,7 @@ from django.template.loaders.filesystem import Loader
 from django.template.loader import render_to_string
 from google.appengine.ext import ndb
 import diff_match_patch
+import logging
 import os
 import re
 import webapp2
@@ -103,18 +104,14 @@ class FiveColumn(webapp2.RequestHandler):
         chapters = ndb.gql('SELECT * FROM Capitulary WHERE chapter = :1', int(self.request.get('chapter')))
         tmps = [None, None, None, None, None]
         sourceList = ['4', '5', '5bis', 'Sirmond', 'Boretius']
-        sourceList.remove(self.request.get('comparison'))
+        comparison = self.request.get('comparison')
+        sourceList.remove(comparison) # returns None
+        sourceList = [comparison] + sourceList # reorder the source list
         for chapter in chapters:
-            if (chapter.source == self.request.get('comparison')):
-                tmps[0] = chapter
-            if (chapter.source == sourceList[0]):
-                tmps[1] = chapter
-            if (chapter.source == sourceList[1]):
-                tmps[2] = chapter
-            if (chapter.source == sourceList[2]):
-                tmps[3] = chapter
-            if (chapter.source == sourceList[3]):
-                tmps[4] = chapter
+            if (chapter.source in sourceList):
+                tmps[sourceList.index(chapter.source)] = chapter
+            else:
+                continue
         columns = []
         for tmp in tmps:
             column = {}
