@@ -24,6 +24,12 @@ def compare(left, right):
     (wordText1, wordText2, wordArray) = dmp.diff_linesToChars('\n'.join(a), '\n'.join(b))
     diffs = dmp.diff_main(wordText1, wordText2, False);
     dmp.diff_charsToLines(diffs, wordArray)
+    #
+    levenshtein = dmp.diff_levenshtein(diffs)
+    logging.info('Levenshtein distance: %d', levenshtein)
+    logging.info('max character count: %d', max(len(left), len(right)))
+    logging.info('similarity: %f', float(levenshtein) / (float(max(len(left), len(right)))))
+    #
     for diff in diffs:
         text = ' '.join(re.split('\n', diff[1]))
         if diff[0] == 1:
